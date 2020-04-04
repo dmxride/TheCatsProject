@@ -1,10 +1,17 @@
 import * as React from 'react';
-import { Text, ScrollView, View, Image, TouchableOpacity } from 'react-native';
+import { Text, ScrollView, View, Image, ActivityIndicator } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+
+import Button from './../../components/Button';
+
+import Styles from './styles';
 
 import { getRandomCat } from '../../API';
 
 export default function () {
   const [cat, setCat] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+  const [saving, setSaving] = React.useState(false);
 
   React.useEffect(() => {
     initCat();
@@ -12,29 +19,56 @@ export default function () {
 
   const initCat = async () => {
     try {
+      setLoading(true);
       const response = await getRandomCat();
-      setCat(response.data);
+      setCat(response[0]);
+      setLoading(false);
     } catch (error) {
-      console.error(error);
+      setLoading(false);
+      alert("Get Error");
+    }
+  };
+
+  const saveFavorite = async (addCat) => {
+    try {
+      setSaving(true);
+      let cats = JSON.parse(await AsyncStorage.getItem('cats'));
+
+      if (cats) {
+        cats.items.push(addCat);
+      } else {
+        cats = { items: [addCat] };
+      }
+
+      await AsyncStorage.setItem('cats', JSON.stringify(cats));
+
+      setSaving(false);
+    } catch (e) {
+      // saving error
+      setSaving(false);
+      alert("Saving Error");
     }
   };
 
   return (
-    <ScrollView
-      style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Home!</Text>
-      {cat && (
-        <View>
-          <Image
-            source={{
-              uri: cat.url,
-            }}
-          />
-          <TouchableOpacity>
-            <Text>Add to favorites</Text>
-          </TouchableOpacity>
+    <View style={Styles.wrapper}>
+      <ScrollView style={Styles.content}>
+        <Button title={'Refresh'} onPress={() => initCat()} />
+        <View style={Styles.contentCat}>
+          {loading && <ActivityIndicator size="large" color="#663399" />}
+          {cat && !loading && (
+            <>
+              <Image
+                style={Styles.catImage}
+                source={{
+                  uri: cat.url,
+                }}
+              />
+              <Button title={'Add to favorites'} onPress={() => saveFavorite(cat)} />
+            </>
+          )}
         </View>
-      )}
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };

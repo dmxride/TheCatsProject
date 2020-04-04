@@ -6,6 +6,7 @@
  * @flow strict-local
  */
 
+import 'react-native-gesture-handler';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -24,12 +25,12 @@ const App = () => {
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
-            if (route.name === 'Home') {
+            if (route.name === 'Add') {
               iconName = focused
-                ? 'ios-information-circle'
-                : 'ios-information-circle-outline';
+                ? 'ios-add-circle'
+                : 'ios-add-circle-outline'
             } else if (route.name === 'Favorites') {
-              iconName = focused ? 'ios-list-box' : 'ios-list';
+              iconName = focused ? 'ios-heart' : 'ios-heart-empty';
             }
 
             // You can return any component that you like here!
@@ -37,10 +38,14 @@ const App = () => {
           },
         })}
         tabBarOptions={{
-          activeTintColor: 'tomato',
-          inactiveTintColor: 'gray',
+          style: {
+            height: 62,
+            paddingBottom: 6
+          },
+          activeTintColor: '#663399',
+          inactiveTintColor: '#9c7fba',
         }}>
-        <Tab.Screen name="Home" component={Home} />
+        <Tab.Screen name="Add" component={Home} />
         <Tab.Screen name="Favorites" component={Favorites} />
       </Tab.Navigator>
     </NavigationContainer>
