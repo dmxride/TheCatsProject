@@ -52,16 +52,18 @@ export default function ({ navigation }) {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Carousel
-        ref={carouselRef}
-        sliderWidth={screenWidth}
-        sliderHeight={screenWidth}
-        itemWidth={screenWidth - 60}
-        data={cats}
-        renderItem={renderItem}
-        hasParallaxImages={true}
-      />
+    <View style={Styles.container}>
+      <View style={{ paddingTop: 30 }}>
+        <Carousel
+          ref={carouselRef}
+          sliderWidth={screenWidth}
+          sliderHeight={screenWidth}
+          itemWidth={screenWidth - 60}
+          data={cats}
+          renderItem={renderItem}
+          hasParallaxImages={true}
+        />
+      </View>
     </View>
   );
 }

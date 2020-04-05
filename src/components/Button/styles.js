@@ -13,6 +13,6 @@ export default StyleSheet.create({
   title: {
     textTransform: 'uppercase',
     color: "#663399",
-    fontWeight: 'bold'
+    fontFamily: "ComicNeue-Regular"
   }
 });

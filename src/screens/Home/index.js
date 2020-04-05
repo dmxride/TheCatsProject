@@ -43,6 +43,8 @@ export default function () {
       await AsyncStorage.setItem('cats', JSON.stringify(cats));
 
       setSaving(false);
+      alert("Added to Favorites");
+
     } catch (e) {
       // saving error
       setSaving(false);
@@ -50,15 +52,17 @@ export default function () {
     }
   };
 
+  //Note: On Android, the default source prop is ignored on debug builds.
   return (
-    <View style={Styles.wrapper}>
-      <ScrollView style={Styles.content}>
+    <ScrollView style={Styles.wrapper} contentContainerStyle={{ flexGrow: 1 }}>
+      <View style={Styles.content}>
         <Button title={'Refresh'} onPress={() => initCat()} />
         <View style={Styles.contentCat}>
           {loading && <ActivityIndicator size="large" color="#663399" />}
           {cat && !loading && (
             <>
               <Image
+                //defaultSource={require('../../assets/placholder.png')}
                 style={Styles.catImage}
                 source={{
                   uri: cat.url,
@@ -68,7 +72,8 @@ export default function () {
             </>
           )}
         </View>
-      </ScrollView>
-    </View>
+      </View>
+
+    </ScrollView>
   );
 };
